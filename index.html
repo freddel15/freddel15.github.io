@@ -1,1 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#0b101a" name="theme-color"/>
+<meta content="Freddel15 — Just a person who know a lil about tech." name="description"/>
+<title>Freddel15</title>
+<style>
+    :root {
+      color-scheme: dark;
+      --text: #fff9f2;
+      --muted: #b6b7c2;
+      --gold: #ffcf95;
+      --border: rgba(255,255,255,.12);
+      --ease: cubic-bezier(.22,1,.36,1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #090e18;
+    }
+    /* A blurred, stationary copy of the banner behind all content. */
+    .background-scene {
+      position: fixed;
+      inset: -40px;
+      z-index: 0;
+      background:
+        linear-gradient(180deg,rgba(7,10,18,.70),rgba(8,10,18,.91)),
+        url("./banner.jpg") center / cover no-repeat;
+      filter: blur(27px) saturate(1.15);
+      transform: translateZ(0) scale(1.04);
+      pointer-events: none;
+    }
+    .background-scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 8%,rgba(255,184,112,.16),transparent 45%),
+        radial-gradient(ellipse at 85% 85%,rgba(88,113,172,.15),transparent 48%);
+    }
+    .shell { position: relative; z-index: 1; width: min(100% - 32px, 620px); margin: 0 auto; padding: 26px 0 72px; }
+    .section { margin-top: 46px; }
+    .section-intro { margin: 0 5px 17px; color: #c1bdc6; font-size: 12px; line-height: 1.7; }
+    .section-no { color: #ffce94; font-size: 10px; letter-spacing: 2px; font-weight: 700; }
+    .section-title { font-size: 19px; letter-spacing: -.5px; font-weight: 740; }
+    .heading.large { align-items: center; margin-bottom: 18px; }
+    .heading.large h2 { font-size: 19px; letter-spacing: -.5px; }
+    .glass-panel { border: 1px solid var(--border); border-radius: 25px; padding: 25px;
+                   background: linear-gradient(130deg,rgba(255,232,205,.08),rgba(255,255,255,.035) 55%,rgba(98,113,164,.075));
+                   box-shadow: 0 15px 48px rgba(0,0,0,.16); backdrop-filter: blur(20px);
+                   -webkit-backdrop-filter: blur(20px); }
+    .panel-eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 13px;
+                     color: #ffcf95; letter-spacing: 1.7px; font-size: 10px; font-weight: 760; text-transform: uppercase; }
+    .panel-eyebrow::before { content: ''; width: 6px; height: 6px; background: #ffc78e;
+                             border-radius: 50%; box-shadow: 0 0 16px rgba(255,199,142,.65); }
+    .about-copy { margin: 0; max-width: 480px; font-size: 15px; line-height: 1.85; color: #e0dce1; }
+    .role-card { position: relative; overflow: hidden; display: flex; gap: 18px; align-items: center; }
+    .role-mark { width: 60px; height: 60px; display: grid; place-items: center; flex: none; border-radius: 19px;
+                 font-size: 25px; font-weight: 720; color: #ffe5c4;
+                 background: linear-gradient(145deg,rgba(255,204,143,.20),rgba(108,116,163,.18));
+                 border: 1px solid rgba(255,221,185,.13); }
+    .role-logo { width: 64px; height: 64px; display: block; flex: none; border-radius: 17px;
+                 object-fit: cover; background: #000; border: 1px solid rgba(255,255,255,.14);
+                 box-shadow: 0 9px 27px rgba(0,0,0,.25); }
+    .role-body { min-width: 0; }
+    .role-note { margin: 8px 0 0; color: #e0dce1; font-size: 13px; line-height: 1.75; }
+    .role-kicker { margin: 0 0 7px; color: #c8bcca; font-size: 11px; letter-spacing: .8px; }
+    .role-name { margin: 0; font-size: 22px; line-height: 1.2; font-weight: 760; letter-spacing: -.7px; }
+    .role-project { margin: 7px 0 0; font-size: 13px; color: #e8bc89; }
+    .device-grid { display: grid; gap: 13px; }
+    .device { display: flex; align-items: center; gap: 17px; padding: 21px;
+              border: 1px solid rgba(255,255,255,.105); border-radius: 23px;
+              background: rgba(18,20,30,.56); backdrop-filter: blur(18px);
+              -webkit-backdrop-filter: blur(18px); transition: transform .5s var(--ease), border-color .4s; }
+    .device:hover { transform: translateY(-3px); border-color: rgba(255,216,177,.25); }
+    .device-icon { flex: none; width: 52px; height: 52px; display: grid; place-items: center; border-radius: 17px;
+                   background: linear-gradient(145deg,rgba(255,215,172,.13),rgba(134,141,197,.09));
+                   border: 1px solid rgba(255,255,255,.08); }
+    .device-icon svg { width: 25px; height: 25px; color: #f3d2ad; }
+    .device-body { min-width: 0; }
+    .device-name { margin: 0; font-weight: 720; font-size: 15px; letter-spacing: -.2px; }
+    .device-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+    .spec { padding: 5px 9px; border: 1px solid rgba(255,255,255,.09); border-radius: 9px;
+            background: rgba(255,255,255,.035); color: #bfc0ca; font-size: 10px; }
+    .scroll-end { width: 1px; height: 1px; }
+    .reveal { opacity: 1; transform: none; }
+    .motion-enabled .reveal { opacity: 0; transform: translateY(26px); transition: opacity .85s var(--ease),transform .85s var(--ease); }
+    .motion-enabled .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
+    .hero { position: relative; overflow: hidden; border: 1px solid var(--border);
+            border-radius: 30px; background: rgba(12,15,24,.64);
+            box-shadow: 0 28px 80px rgba(0,0,0,.34); backdrop-filter: blur(18px); }
+    .banner { height: clamp(175px, 34vw, 240px); overflow: hidden; position: relative; }
+    .banner img { width: 100%; height: 100%; display: block; object-fit: cover;
+                  object-position: center 54%; transition: transform 1.2s var(--ease); }
+    .hero:hover .banner img { transform: scale(1.045); }
+    .banner::after { content: ""; position: absolute; inset: 0;
+                     background: linear-gradient(180deg,transparent 43%,rgba(11,14,23,.67)); }
+    .profile { text-align: center; padding: 0 20px 30px; }
+    .avatar { width: 112px; height: 112px; position: relative; z-index: 1; display: block;
+              margin: -55px auto 18px; padding: 4px; border-radius: 50%;
+              background: linear-gradient(135deg,#fff3df,#f2ae71 65%,#8490c9);
+              box-shadow: 0 12px 38px rgba(0,0,0,.42);
+              transition: transform .55s var(--ease),box-shadow .55s var(--ease); }
+    .avatar:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 20px 48px rgba(0,0,0,.52); }
+    .avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+    h1 { font-size: clamp(38px,8vw,57px); letter-spacing: -2.6px; font-weight: 750;
+         line-height: 1.08; margin: 0; }
+    .subtitle { margin: 15px auto 0; max-width: 430px; font-size: 14px; line-height: 1.8;
+                color: #cfccd1; }
+    .heading { display: flex; align-items: baseline; justify-content: space-between;
+               margin: 29px 5px 14px; gap: 10px; }
+    .heading h2 { margin: 0; font-size: 14px; font-weight: 700; }
+    .heading small { font-size: 10px; letter-spacing: 1.6px; color: #b8adad; }
+    .links { display: grid; gap: 11px; }
+    .link { --x: 50%; --y: 50%; display: flex; align-items: center; gap: 15px;
+            position: relative; overflow: hidden; min-height: 75px; padding: 15px;
+            border-radius: 20px; border: 1px solid rgba(255,255,255,.11);
+            background: linear-gradient(105deg,rgba(255,255,255,.095),rgba(255,255,255,.035));
+            color: inherit; text-decoration: none; backdrop-filter: blur(18px);
+            box-shadow: 0 8px 20px rgba(0,0,0,.13);
+            transition: transform .5s var(--ease),border-color .4s,box-shadow .5s var(--ease); }
+    .link::before { content: ""; position: absolute; inset: 0; opacity: 0;
+                    background: radial-gradient(240px circle at var(--x) var(--y),rgba(255,215,170,.14),transparent 78%);
+                    transition: opacity .4s; pointer-events: none; }
+    .link:hover { transform: translateY(-4px); border-color: rgba(255,216,177,.36);
+                  box-shadow: 0 16px 36px rgba(0,0,0,.26); }
+    .link:hover::before { opacity: 1; }
+    .link:active { transform: scale(.985); transition-duration: .13s; }
+    .link:focus-visible { outline: 2px solid #ffcf95; outline-offset: 3px; }
+    .icon { z-index: 1; width: 45px; height: 45px; border-radius: 14px; flex: none;
+            display: grid; place-items: center; background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.08); }
+    .icon svg { width: 23px; height: 23px; }
+    .link-label { z-index: 1; flex: 1; min-width: 0; }
+    .link-label strong { display: block; font-size: 15px; margin-bottom: 0; letter-spacing: -.2px; }
+    .arrow { z-index: 1; flex: none; color: #c6c1cc; font-size: 19px;
+             transition: transform .4s var(--ease); }
+    .link:hover .arrow { transform: translate(3px,-3px); }
+    .link.disabled { opacity: .52; cursor: default; }
+    .link.disabled:hover { transform: none; border-color: rgba(255,255,255,.11); box-shadow: none; }
+    footer { text-align: center; font-size: 11px; color: #aa9eaa; margin-top: 35px; }
+    .enter { animation: rise .95s var(--ease) both; animation-delay: var(--delay,0s); }
+    @keyframes rise { from { opacity: 0; transform: translateY(20px); }
+                      to { opacity: 1; transform: translateY(0); } }
+    @media(max-width:520px) {
+      .shell { width: min(100% - 24px,620px); padding-top: 17px; }
+      .hero { border-radius: 25px; }
+      .avatar { width: 100px; height: 100px; margin-top: -49px; }
+      h1 { letter-spacing: -1.7px; }
+      .profile { padding-bottom: 25px; }
+      .section { margin-top: 38px; }
+      .glass-panel { padding: 20px; }
+      .role-name { font-size: 20px; }
+      .role-card { gap: 13px; }
+      .role-logo { width: 56px; height: 56px; border-radius: 15px; }
+      .device { padding: 17px; gap: 13px; }
+      .device-icon { width: 45px; height: 45px; border-radius: 14px; }
+      .device-meta { gap: 5px; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+      .motion-enabled .reveal { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* Vought release explorer – preserves v5's blur, palette and motion */
+    .role-launch {
+      position: relative; width: 100%; appearance: none; display: flex; gap: 18px; align-items: center;
+      text-align: left; color: inherit; cursor: pointer; font: inherit;
+      transition: transform .5s var(--ease),border-color .4s,box-shadow .5s var(--ease);
+    }
+    .role-launch:hover { transform: translateY(-3px); border-color: rgba(255,216,177,.36); box-shadow: 0 23px 60px rgba(0,0,0,.25); }
+    .role-launch:active { transform: scale(.989); transition-duration:.15s; }
+    .role-launch:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+    .role-forward { margin-left: auto; display: flex; align-items: center; gap: 8px; color: #f3d2ae; font-size: 11px; white-space: nowrap; }
+    .role-forward svg { width: 17px; height: 17px; transition: transform .45s var(--ease); }
+    .role-launch:hover .role-forward svg { transform: translateX(4px); }
+    .rom-modal {
+      position: fixed; inset: 0; margin: auto; padding: 0; width: min(860px, calc(100% - 30px));
+      max-height: min(90dvh, 920px); border: 1px solid rgba(255,233,203,.22);
+      border-radius: 29px; color: var(--text); background: rgba(14,17,27,.96);
+      backdrop-filter: blur(36px); -webkit-backdrop-filter: blur(36px);
+      box-shadow: 0 42px 140px rgba(0,0,0,.65); overflow: hidden;
+      opacity: 0; transform: translateY(22px) scale(.975);
+      transition: opacity .32s ease, transform .52s var(--ease);
+    }
+    .rom-modal[open] { display:flex; flex-direction:column; }
+    .rom-modal.showing { opacity:1; transform:translateY(0) scale(1); }
+    .rom-modal::backdrop { background:rgba(4,6,12,.76); backdrop-filter:blur(0); -webkit-backdrop-filter:blur(0); transition:backdrop-filter .45s,background .45s; }
+    .rom-modal.showing::backdrop { background:rgba(4,6,12,.75); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
+    .modal-header { display:flex; align-items:center; gap:13px; padding:20px 23px; border-bottom:1px solid var(--border);
+                    background:linear-gradient(115deg,rgba(255,203,148,.085),rgba(18,22,35,.92)); }
+    .modal-logo { width:49px;height:49px;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.15); }
+    .modal-title-group {min-width:0;flex:1;}
+    .modal-overline {display:block;color:#e3bb8b;font-size:10px;letter-spacing:1.3px;text-transform:uppercase;margin-bottom:3px;}
+    .modal-title {font-weight:760;letter-spacing:-.5px;font-size:20px;margin:0;}
+    .modal-close { width:36px;height:36px; display:grid;place-items:center;flex:none; border-radius:12px;
+                   background:rgba(255,255,255,.08); color:var(--text);border:1px solid rgba(255,255,255,.09);
+                   cursor:pointer; font-size:22px; transition:background .25s, transform .3s var(--ease); }
+    .modal-close:hover {background:rgba(255,255,255,.18); transform:rotate(90deg);}
+    .modal-close:focus-visible,summary:focus-visible {outline:2px solid var(--gold);outline-offset:3px;}
+    .modal-scroll {overflow:auto; overscroll-behavior:contain; padding:22px 23px 32px; scrollbar-color:#5e5666 transparent; scrollbar-width:thin;}
+    .modal-desc {margin:0 0 18px; color:#bdb7c4; font-size:13px; line-height:1.7;}
+    [hidden] {display:none!important;}
+    .device-panel {animation:panelEnter .44s var(--ease) both;}
+    @keyframes panelEnter {from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+    .rom-system {margin:25px 2px 13px;display:flex;align-items:center;gap:12px;}
+    .rom-system:first-child {margin-top:0;}
+    .rom-system h3 {font-size:17px;letter-spacing:-.4px;margin:0;}
+    .rom-system span {font-size:11px;color:#b2a8b6;}
+    .release-list {display:grid;gap:12px;}
+    .release-card {interpolate-size:allow-keywords; border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.12);
+                   background:linear-gradient(115deg,rgba(255,229,191,.075),rgba(255,255,255,.035));}
+    .release-summary {display:flex;gap:13px;align-items:center;padding:19px 20px;cursor:pointer;list-style:none;}
+    .release-summary::-webkit-details-marker {display:none;}
+    .release-identity {display:grid;gap:6px;min-width:0;flex:1;}
+    .edition-label {color:#ffcf95;font-size:10px;font-weight:750;text-transform:uppercase;letter-spacing:1.4px;}
+    .release-summary strong {font-size:16px;letter-spacing:-.2px;line-height:1.45;}
+    .release-meta-small {color:#b6b0bd;font-size:11px;line-height:1.55;}
+    .expand-icon {font-size:25px;line-height:1;color:#f8d1a1;transition:transform .36s var(--ease);}
+    .release-card[open] .expand-icon {transform:rotate(180deg);}
+    .release-card::details-content { block-size:0;overflow:hidden;transition:block-size .55s var(--ease),content-visibility .55s allow-discrete; }
+    .release-card[open]::details-content { block-size:auto; }
+    .release-detail-inner {padding:0 20px 20px;}
+    .release-details-body {border-top:1px solid rgba(255,255,255,.1);padding-top:19px;}
+    .meta-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 21px;}
+    .meta-item {min-width:0;display:grid;gap:5px;}
+    .meta-label {color:#a59ba9;font-size:11px;}
+    .meta-value {color:#f0e9e4;font-size:13px;line-height:1.5;overflow-wrap:anywhere;}
+    .mini-heading {font-size:12px;color:#fce0b9;font-weight:760;letter-spacing:.1px;margin:22px 0 11px;}
+    .features-list {margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;list-style:none;}
+    .features-list li {padding:11px 12px;border:1px solid rgba(255,255,255,.08);
+                       background:rgba(255,255,255,.045);border-radius:12px;color:#e6dfe2;font-size:12px;line-height:1.5;}
+    .features-list li::before {content:'✦';font-size:11px;color:#ffd3a0;margin-right:8px;}
+    .rom-paragraph,.notes-list,.install-list {color:#d0c9d3;font-size:12.5px;line-height:1.8;}
+    .rom-paragraph {margin:0;}
+    .notes-list,.install-list {margin:0;padding-left:21px;}
+    .notes-list li,.install-list li {padding:3px 0;}
+    .inline-link {color:#ffdbad;text-decoration:none;border-bottom:1px solid rgba(255,215,169,.38);}
+    .inline-link:hover {color:#fff;border-color:#fff;}
+    .resource-row {display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+    .pill-link {display:inline-flex;align-items:center;text-decoration:none;color:#fbe6ca;font-size:12px;
+                background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13);
+                border-radius:10px;padding:10px 13px;transition:background .25s,transform .25s;}
+    .pill-link:hover {background:rgba(255,255,255,.14);transform:translateY(-2px);}
+    .download-row {margin-top:23px;}
+    .download-link {display:flex;justify-content:center;align-items:center;min-height:47px;border-radius:13px;
+                    color:#1e1b1d;background:linear-gradient(110deg,#ffe0b4,#e9bd91);
+                    font-size:13px;font-weight:750;text-decoration:none;transition:transform .3s,filter .3s;}
+    .download-link:hover {transform:translateY(-2px);filter:brightness(1.08);}
+    .data-warning {margin:13px 0 0;border-left:2px solid #eebd85;padding:7px 11px;
+                   color:#dbc2b0;background:rgba(255,200,141,.055);font-size:11px;line-height:1.7;}
+    .rom-footer {display:flex;gap:12px;flex-wrap:wrap;margin-top:27px;padding-top:18px;border-top:1px solid rgba(255,255,255,.09);font-size:12px;}
+    .empty-device {min-height:210px;display:grid;place-content:center;text-align:center;padding:30px 22px;
+                   border-radius:20px;border:1px dashed rgba(255,255,255,.14);background:rgba(255,255,255,.025);}
+    .empty-device strong {font-size:19px;letter-spacing:-.5px;}
+    .empty-device p {font-size:13px;color:#b6b1be;line-height:1.7;margin:12px 0 0;}
+    .modal-open {overflow:hidden;}
+    @media(max-width:520px) {
+      .role-launch {gap:12px;padding:17px;}
+      .role-forward span {display:none;}
+      .role-forward {margin-left:auto;}
+      .rom-modal {width:calc(100% - 12px);max-height:calc(100dvh - 12px);border-radius:22px;}
+      .modal-header {padding:16px;}
+      .modal-scroll {padding:17px 15px 25px;}
+      .modal-title {font-size:18px;}
+      .features-list {grid-template-columns:1fr;gap:6px;}
+      .meta-grid {gap:13px 10px;}
+      .release-summary {padding:16px;}
+      .release-summary strong {font-size:14px;}
+      .release-detail-inner {padding:0 15px 18px;}
+    }
+    @media(prefers-reduced-motion:reduce) {
+      .rom-modal,.rom-modal::backdrop,.device-panel {animation:none!important;transition:none!important;}
+    }
+
+    /* v7: optional camera patch, mirrored downloads and scrollable archives */
+    .download-row {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .download-link {min-width:0;padding:10px 12px;text-align:center}
+    .download-link.mirror-download {background:rgba(255,255,255,.075);border:1px solid rgba(255,224,188,.3);color:#ffdfb2}
+    .checksum-box {display:flex;flex-wrap:wrap;align-items:center;gap:7px 10px;margin-top:12px;
+      background:rgba(0,0,0,.17);border:1px solid rgba(255,255,255,.07);border-radius:11px;padding:10px 11px}
+    .checksum-heading {font-size:10px;font-weight:720;letter-spacing:.55px;color:#b4abb5}
+    .checksum-value {font-family:ui-monospace,Consolas,monospace;flex:1 1 180px;min-width:0;overflow-wrap:anywhere;
+      color:#c6bdc9;font-size:10px;line-height:1.65;user-select:all}
+    .copy-checksum {appearance:none;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.065);
+      color:#e8d9ca;padding:7px 10px;border-radius:9px;font:600 11px inherit;cursor:pointer;
+      font-family:inherit;font-size:11px;font-weight:650;transition:background .25s,transform .25s var(--ease)}
+    .copy-checksum:hover {background:rgba(255,255,255,.13);transform:translateY(-1px)}
+    .copy-checksum:focus-visible,.archive-link:focus-visible {outline:2px solid var(--gold);outline-offset:3px}
+    .archive-section {margin-top:26px}
+    .archive-headline {font-size:16px;font-weight:720;letter-spacing:-.3px;margin:0 0 7px}
+    .archive-intro {color:#b8adb7;font-size:12px;line-height:1.7;margin:0 0 14px}
+    .archive-group {border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.035);
+      border-radius:18px;overflow:hidden}
+    .archive-group>summary {cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;
+      padding:18px 17px;font-size:13px;font-weight:700;color:#f6ece6}
+    .archive-group>summary::-webkit-details-marker {display:none}
+    .archive-group>summary span {margin-left:auto;color:#bdb1b8;font-weight:400;font-size:11px}
+    .archive-group>summary::after {content:'⌄';font-size:22px;color:#ffd3a0;line-height:1;transition:transform .35s var(--ease)}
+    .archive-group[open]>summary::after {transform:rotate(180deg)}
+    .archive-list {display:grid;gap:11px}
+    .archive-group .archive-list {padding:0 12px 12px}
+    .archive-item {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;align-items:center;
+      background:linear-gradient(112deg,rgba(255,222,188,.066),rgba(255,255,255,.035));
+      border:1px solid rgba(255,255,255,.105);border-radius:16px;padding:14px 14px 13px}
+    .archive-label {font-size:13px;font-weight:690;color:#eee8ed;line-height:1.55}
+    .archive-link {padding:8px 11px;white-space:nowrap;text-decoration:none;border-radius:10px;
+      background:rgba(255,222,185,.11);border:1px solid rgba(255,212,160,.17);
+      color:#ffdbad;font-size:11px;font-weight:700;transition:transform .25s,background .25s}
+    .archive-link:hover {transform:translateY(-2px);background:rgba(255,222,185,.19)}
+    .archive-item .checksum-box {grid-column:1/-1;margin-top:6px}
+    .mirror-credit {font-size:11px;color:#a99ea8;line-height:1.7;margin:12px 2px 0}
+    @media(max-width:520px) {
+      .download-row {grid-template-columns:1fr}
+      .archive-item {grid-template-columns:minmax(0,1fr)}
+      .archive-link {justify-self:start}
+    }
+    @media(prefers-reduced-motion:reduce){.archive-group>summary::after {transition:none}}
+  
+    /* v8: obvious camera-fix action and polished A35 release details */
+    .a35-featured-note {margin:8px 2px 18px;color:#c8bec8;font-size:12px;line-height:1.7}
+    .a35-links {margin-top:15px;display:flex;flex-wrap:wrap;gap:9px}
+    .a35-links a {text-align:center}
+    @media(max-width:520px) {
+        .a35-links .pill-link {flex:1 1 auto;}
+    }
+</style>
+</head>
+<body>
+<div aria-hidden="true" class="background-scene"></div>
+<div class="shell">
+<main>
+<section aria-label="Profile" class="hero enter" style="--delay:.08s">
+<div class="banner"><img alt="Cloudy golden-sky banner" src="./banner.jpg"/></div>
+<div class="profile">
+<div class="avatar"><img alt="Freddel15 avatar" src="./pfp.jpg"/></div>
+<h1>Freddel15</h1>
+<p class="subtitle">Just a person who know a lil about tech</p>
+</div>
+</section>
+<section aria-label="Social links">
+<div class="heading enter" style="--delay:.15s">
+<h2>Links</h2>
+</div>
+<div class="links" id="links"></div>
+</section>
+<section aria-labelledby="role-heading" class="section reveal">
+<div class="heading large">
+<h2 id="role-heading">About Me</h2>
+</div>
+<button aria-controls="rom-modal" aria-haspopup="dialog" class="glass-panel role-launch" id="open-roms" type="button">
+<img alt="Vought Project logo" class="role-logo" height="64" src="./vought-logo.jpg" width="64"/>
+<div class="role-body">
+<h3 class="role-name">Vought Project</h3>
+<p class="role-note">I'm currently a co-dev on Vought Project.</p>
+</div>
+<div class="role-forward"><span>Explore ROMs</span><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" viewbox="0 0 24 24"><path d="m9 5 7 7-7 7"></path></svg></div>
+</button>
+</section>
+<section aria-labelledby="devices-heading" class="section reveal">
+<div class="heading large">
+<h2 id="devices-heading">My Devices</h2>
+</div>
+<div class="device-grid">
+<article class="device">
+<div aria-hidden="true" class="device-icon">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewbox="0 0 24 24"><rect height="20" rx="2.5" width="12" x="6" y="2"></rect><path d="M11 18.5h2"></path></svg>
+</div>
+<div class="device-body">
+<h3 class="device-name">Samsung Galaxy A51</h3>
+<div class="device-meta"><span class="spec">8GB RAM</span><span class="spec">128GB Storage</span></div>
+</div>
+</article>
+<article class="device">
+<div aria-hidden="true" class="device-icon">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewbox="0 0 24 24"><rect height="20" rx="2.5" width="12" x="6" y="2"></rect><path d="M11 18.5h2"></path></svg>
+</div>
+<div class="device-body">
+<h3 class="device-name">Samsung Galaxy A51</h3>
+<div class="device-meta"><span class="spec">6GB RAM</span><span class="spec">128GB Storage</span></div>
+</div>
+</article>
+<article class="device">
+<div aria-hidden="true" class="device-icon">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewbox="0 0 24 24"><rect height="13" rx="2" width="18" x="3" y="4"></rect><path d="m2 20 2-3h16l2 3H2Z"></path></svg>
+</div>
+<div class="device-body">
+<h3 class="device-name">Acer Aspire 5 14</h3>
+<div class="device-meta"><span class="spec">Intel Core i5-1335U</span><span class="spec">16GB LPDDR5</span><span class="spec">512GB SSD</span></div>
+</div>
+</article>
+<article class="device">
+<div aria-hidden="true" class="device-icon">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><rect x="7" y="6" width="10" height="12" rx="3"></rect><path d="M9 6V3h6v3M9 18v3h6v-3"></path><circle cx="12" cy="12" r="2"></circle></svg>
+</div>
+<div class="device-body">
+<h3 class="device-name">Samsung Galaxy Watch6 40mm</h3>
+<div class="device-meta"><span class="spec">40mm</span><span class="spec">Bluetooth</span></div>
+</div>
+</article>
+<article class="device">
+<div aria-hidden="true" class="device-icon">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"></rect><path d="m2 20 2-3h16l2 3H2Z"></path></svg>
+</div>
+<div class="device-body">
+<h3 class="device-name">Lenovo IdeaPad 330-14IKB</h3>
+<div class="device-meta"><span class="spec">Intel Core i7-8550U</span><span class="spec">12GB DDR4</span><span class="spec">128GB SSD + 500GB HDD</span></div>
+</div>
+</article>
+</div>
+</section>
+</main>
+</div>
+<dialog aria-labelledby="rom-title" class="rom-modal" id="rom-modal">
+<div class="modal-header">
+<img alt="" class="modal-logo" height="49" src="./vought-logo.jpg" width="49"/>
+<div class="modal-title-group"><span class="modal-overline">Vought Project</span><h2 class="modal-title" id="rom-title">Galaxy A51 · ROM Releases</h2></div>
+<button aria-label="Close ROM releases" class="modal-close" id="close-roms" type="button">×</button>
+</div>
+<div class="modal-scroll" id="modal-scroll">
+
+
+<section class="device-panel" id="device-a51">
+<div class="rom-system"><h3>One UI 8.5</h3><span>2 releases</span></div>
+<div class="release-list">
+<details class="release-card">
+<summary class="release-summary">
+<span class="release-identity"><span class="edition-label">Standard Edition</span><strong>Vought Project</strong><span class="release-meta-small">V3.0 Stable · A356E — One UI 8.5</span></span>
+<span aria-hidden="true" class="expand-icon">⌄</span>
+</summary>
+<div class="release-detail-inner">
+<div class="release-details-body">
+<div class="meta-grid"><div class="meta-item"><span class="meta-label">Owner</span><div class="meta-value"><a class="inline-link" href="https://t.me/xv2ice" rel="noopener noreferrer" target="_blank">Ice<span aria-hidden="true"> ↗</span></a></div></div><div class="meta-item"><span class="meta-label">Version</span><div class="meta-value">V3.0 Stable</div></div><div class="meta-item"><span class="meta-label">Base</span><div class="meta-value">A356E — One UI 8.5</div></div><div class="meta-item"><span class="meta-label">Kernel</span><div class="meta-value">Long Kernel KSU Fork</div></div><div class="meta-item"><span class="meta-label">Supported Device</span><div class="meta-value">Galaxy A51 4G</div></div><div class="meta-item"><span class="meta-label">Released</span><div class="meta-value">5 September 2026</div></div></div>
+<div class="mini-heading">✨ Features</div>
+<ul class="features-list"><li>No Galaxy AI</li><li>Outdoor Mode</li><li>Extra Brightness</li><li>HighEnd Animations</li><li>Fully Working Camera</li><li>Native Secure Folder</li><li>Battery Health</li><li>Much More ....</li></ul>
+<div class="mini-heading">🐞 Bugs</div>
+<p class="rom-paragraph">None reported in the release post.</p>
+<div class="mini-heading">📝 Notes</div>
+<ul class="notes-list"><li>No one is allowed to use this base without permission.</li><li>If TWRP shows a system_root error, ignore it.</li><li>Clean Flash is REQUIRED.</li><li>The system partition is read-only.</li><li>If portrait mode has problems, spoof to A51 using <a class="inline-link" href="https://github.com/xv2ice/WinterHide/releases/tag/v1.0.0" rel="noopener noreferrer" target="_blank">Winter Hide<span aria-hidden="true"> ↗</span></a>.</li><li>ROM needs time to settle.</li></ul>
+<div class="mini-heading">🔥 Installation Guide</div>
+<ol class="install-list"><li>Flash the latest stock firmware (Recommended).</li><li>Reboot to recovery.</li><li>Format data.</li><li>Flash the ROM.</li></ol>
+<p class="data-warning">Formatting data erases your files. Back up important data before flashing.</p>
+<div class="mini-heading">🍡 Extras</div>
+<div class="resource-row"><a class="inline-link" href="https://t.me/VoughtProject/8815/8850" rel="noopener noreferrer" target="_blank">KSU Fork Root Manager<span aria-hidden="true"> ↗</span></a><a class="inline-link" href="https://github.com/xv2ice/WinterHide/releases/tag/v1.0.0" rel="noopener noreferrer" target="_blank">Winter Hide Module<span aria-hidden="true"> ↗</span></a><a class="inline-link" href="https://t.me/VoughtProject/6552/11600" rel="noopener noreferrer" target="_blank">Camera Module Fix (A51 · One UI 8.5)<span aria-hidden="true"> ↗</span></a></div>
+<div class="mini-heading">Resources</div>
+<div class="resource-row"><a class="pill-link" href="https://telegra.ph/Changelog-For-Vought-Project-V30-A515F-08-29" rel="noopener noreferrer" target="_blank">Changelog<span aria-hidden="true"> ↗</span></a><a class="pill-link" href="https://t.me/VoughtProject/8637/8877" rel="noopener noreferrer" target="_blank">Screenshots<span aria-hidden="true"> ↗</span></a><a class="pill-link" href="https://telegra.ph/Credits-For-Vought-Project-V30-08-29" rel="noopener noreferrer" target="_blank">Credits<span aria-hidden="true"> ↗</span></a></div>
+<div class="download-row"><a class="download-link" href="https://pixeldrain.com/u/3unDRbBh" rel="noopener noreferrer" target="_blank">PixelDrain ↗</a><a class="download-link mirror-download" href="https://drive.usercontent.google.com/download?id=1BirHvG1dy92tsBRYtzNKA_1IBD7GMeBi" rel="noopener noreferrer" target="_blank">Google Drive · Mirror ↗</a></div><div class="checksum-box"><span class="checksum-heading">SHA-256</span><code class="checksum-value">a61eaaab1a41367384f5de29fa48b8fe24755c357d53d8f875c62a10d82e7222</code><button aria-label="Copy SHA-256 checksum" class="copy-checksum" data-checksum="a61eaaab1a41367384f5de29fa48b8fe24755c357d53d8f875c62a10d82e7222" type="button">Copy</button></div>
+</div>
+</div>
+</details>
+<details class="release-card">
+<summary class="release-summary">
+<span class="release-identity"><span class="edition-label">CRYSTAL Edition</span><strong>Vought Project — CRYSTAL Edition</strong><span class="release-meta-small">V2.0 Stable · S23 FE — One UI 8.5</span></span>
+<span aria-hidden="true" class="expand-icon">⌄</span>
+</summary>
+<div class="release-detail-inner">
+<div class="release-details-body">
+<div class="meta-grid"><div class="meta-item"><span class="meta-label">Owner</span><div class="meta-value"><a class="inline-link" href="https://t.me/xv2ice" rel="noopener noreferrer" target="_blank">Ice<span aria-hidden="true"> ↗</span></a></div></div><div class="meta-item"><span class="meta-label">Version</span><div class="meta-value">V2.0 Stable</div></div><div class="meta-item"><span class="meta-label">Base</span><div class="meta-value">S23 FE — One UI 8.5</div></div><div class="meta-item"><span class="meta-label">Kernel</span><div class="meta-value">Long Kernel KSU Fork</div></div><div class="meta-item"><span class="meta-label">Supported Device</span><div class="meta-value">Galaxy A51 4G</div></div><div class="meta-item"><span class="meta-label">Released</span><div class="meta-value">4 September 2026</div></div></div>
+<div class="mini-heading">✨ Features</div>
+<ul class="features-list"><li>Galaxy AI</li><li>Outdoor Mode</li><li>Extra Brightness</li><li>HighEnd Animations</li><li>Fully Working Camera</li><li>Native Secure Folder</li><li>Battery Health</li><li>Much More ....</li></ul>
+<div class="mini-heading">🐞 Bugs</div>
+<p class="rom-paragraph">None reported in the release post.</p>
+<div class="mini-heading">📝 Notes</div>
+<ul class="notes-list"><li>No one is allowed to use this base without permission.</li><li>If TWRP shows a system_root error, ignore it.</li><li>Clean Flash is REQUIRED.</li><li>The system partition is read-only.</li><li>If portrait mode has problems, spoof to A51 using <a class="inline-link" href="https://github.com/xv2ice/WinterHide/releases/tag/v1.0.0" rel="noopener noreferrer" target="_blank">Winter Hide<span aria-hidden="true"> ↗</span></a>.</li><li>ROM needs time to settle.</li></ul>
+<div class="mini-heading">🔥 Installation Guide</div>
+<ol class="install-list"><li>Flash the latest stock firmware (Recommended).</li><li>Reboot to recovery.</li><li>Format data.</li><li>Flash the ROM.</li></ol>
+<p class="data-warning">Formatting data erases your files. Back up important data before flashing.</p>
+<div class="mini-heading">🍡 Extras</div>
+<div class="resource-row"><a class="inline-link" href="https://t.me/VoughtProject/8815/8850" rel="noopener noreferrer" target="_blank">KSU Fork Root Manager<span aria-hidden="true"> ↗</span></a><a class="inline-link" href="https://github.com/xv2ice/WinterHide/releases/tag/v1.0.0" rel="noopener noreferrer" target="_blank">Winter Hide Module<span aria-hidden="true"> ↗</span></a><a class="inline-link" href="https://t.me/VoughtProject/6552/11600" rel="noopener noreferrer" target="_blank">Camera Module Fix (A51 · One UI 8.5)<span aria-hidden="true"> ↗</span></a></div>
+<div class="mini-heading">Resources</div>
+<div class="resource-row"><a class="pill-link" href="https://telegra.ph/Changelog-For-Vought-Project-CRYSTAL-Edition-V20-09-03" rel="noopener noreferrer" target="_blank">Changelog<span aria-hidden="true"> ↗</span></a><a class="pill-link" href="https://t.me/VoughtProject/8637/8932" rel="noopener noreferrer" target="_blank">Screenshots<span aria-hidden="true"> ↗</span></a><a class="pill-link" href="https://telegra.ph/Credits-For-Vought-Project-CRYSTAL-Edition-V20-09-03" rel="noopener noreferrer" target="_blank">Credits<span aria-hidden="true"> ↗</span></a></div>
+<div class="download-row"><a class="download-link" href="https://pixeldrain.com/u/C65eLT64" rel="noopener noreferrer" target="_blank">PixelDrain ↗</a><a class="download-link mirror-download" href="https://drive.usercontent.google.com/download?id=1uZPnyWasHPIpXWirpSytB_xns0TzxLi5" rel="noopener noreferrer" target="_blank">Google Drive · Mirror ↗</a></div><div class="checksum-box"><span class="checksum-heading">SHA-256</span><code class="checksum-value">6540d4e54c6810e8051b6a9d29c69fb66cd53d6855dff4306b72ed9c80c2c313</code><button aria-label="Copy SHA-256 checksum" class="copy-checksum" data-checksum="6540d4e54c6810e8051b6a9d29c69fb66cd53d6855dff4306b72ed9c80c2c313" type="button">Copy</button></div>
+</div>
+</div>
+</details>
+</div>
+<div class="rom-system"><h3>One UI 9</h3><span>1 release</span></div>
+<div class="release-list"><details class="release-card">
+<summary class="release-summary">
+<span class="release-identity"><span class="edition-label">CRYBON Edition</span><strong>Vought Project — CRYBON Edition</strong><span class="release-meta-small">V3.0 Stable · A57 5G — One UI 9.0</span></span>
+<span aria-hidden="true" class="expand-icon">⌄</span>
+</summary>
+<div class="release-detail-inner">
+<div class="release-details-body">
+<div class="meta-grid"><div class="meta-item"><span class="meta-label">Owner</span><div class="meta-value"><a class="inline-link" href="https://t.me/xv2ice" rel="noopener noreferrer" target="_blank">Ice<span aria-hidden="true"> ↗</span></a></div></div><div class="meta-item"><span class="meta-label">Version</span><div class="meta-value">V3.0 Stable</div></div><div class="meta-item"><span class="meta-label">Base</span><div class="meta-value">A57 5G — One UI 9.0</div></div><div class="meta-item"><span class="meta-label">Kernel</span><div class="meta-value">Long Kernel KSU Fork</div></div><div class="meta-item"><span class="meta-label">Supported Device</span><div class="meta-value">Galaxy A51 4G</div></div><div class="meta-item"><span class="meta-label">Released</span><div class="meta-value">23 October 2026</div></div></div>
+<div class="mini-heading">✨ Features</div>
+<ul class="features-list"><li>Outdoor Mode</li><li>Private Album</li><li>Extra Brightness</li><li>Galaxy AI</li><li>Secure Folder / SHealth</li><li>IceReborn Pre-added</li><li>Fully Working Camera</li><li>Much More ....</li></ul>
+<div class="mini-heading">🐞 Bugs</div>
+<p class="rom-paragraph">None reported in the release post.</p>
+<div class="mini-heading">📝 Notes</div>
+<p class="rom-paragraph">Full release notes: <a class="inline-link" href="https://telegra.ph/Notes-For-Vought-Project-CRYBON-Edition-V30-A515F-10-23" rel="noopener noreferrer" target="_blank">Read notes<span aria-hidden="true"> ↗</span></a></p>
+<div class="mini-heading">🔥 Installation Guide</div>
+<ol class="install-list"><li>Flash the latest stock firmware (Highly recommended).</li><li>Reboot to recovery.</li><li>Format data.</li><li>Flash the ROM.</li></ol>
+<p class="data-warning">Formatting data erases your files. Back up important data before flashing.</p>
+<div class="mini-heading">🍡 Extras</div>
+<div class="resource-row"><a class="inline-link" href="https://t.me/icedumbfiles/675" rel="noopener noreferrer" target="_blank">KSU Fork Root Manager<span aria-hidden="true"> ↗</span></a><a class="inline-link" href="https://github.com/xv2ice/WinterHide/releases/tag/v1.0.0" rel="noopener noreferrer" target="_blank">Winter Hide Module<span aria-hidden="true"> ↗</span></a></div>
+<div class="mini-heading">Resources</div>
+<div class="resource-row"><a class="pill-link" href="https://telegra.ph/Changelog-For-Vought-Project-CRYBON-Edition-V30-A515F-10-23" rel="noopener noreferrer" target="_blank">Changelog<span aria-hidden="true"> ↗</span></a><a class="pill-link" href="https://t.me/VoughtProject/8637/12318" rel="noopener noreferrer" target="_blank">Screenshots<span aria-hidden="true"> ↗</span></a><a class="pill-link" href="https://telegra.ph/Credits-For-Vought-Project-CRYBON-Edition-V20-10-23" rel="noopener noreferrer" target="_blank">Credits<span aria-hidden="true"> ↗</span></a></div>
+<div class="download-row"><a class="download-link" href="https://pixeldrain.com/u/u5iXnWP3" rel="noopener noreferrer" target="_blank">PixelDrain ↗</a><a class="download-link mirror-download" href="https://drive.usercontent.google.com/download?id=1m5w5Eb9ruFoBs-IXet_X3jRiY_3BJMO8" rel="noopener noreferrer" target="_blank">Google Drive · Mirror ↗</a></div><div class="checksum-box"><span class="checksum-heading">SHA-256</span><code class="checksum-value">18576e07142301e4b841a9381ad56dfb1052ea8b143b0cb9db270a6b1a52c8d4</code><button aria-label="Copy SHA-256 checksum" class="copy-checksum" data-checksum="18576e07142301e4b841a9381ad56dfb1052ea8b143b0cb9db270a6b1a52c8d4" type="button">Copy</button></div>
+</div>
+</div>
+</details></div>
+
+<div class="rom-footer"><a class="inline-link" href="https://t.me/Bettercallice" rel="noopener noreferrer" target="_blank">Official Channel<span aria-hidden="true"> ↗</span></a><a class="inline-link" href="https://t.me/VoughtProject" rel="noopener noreferrer" target="_blank">Official Support Group<span aria-hidden="true"> ↗</span></a></div>
+</section>
+
+
+</div>
+</dialog>
+<script>
+    // Edit link sosial di sini jika alamat akun berubah.
+    const LINKS = [
+      { title: "Telegram", url: "https://t.me/freddel15", icon: "telegram" },
+      { title: "TikTok", url: "https://www.tiktok.com/@freddel15", icon: "tiktok" },
+      { title: "YouTube", url: "https://www.youtube.com/@freddel15", icon: "youtube" },
+      { title: "Discord", url: "https://discord.com/users/943024143606095893", icon: "discord" }
+    ];
+    const paths = {
+      telegram: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+      tiktok: '<path d="M16 3c.5 2.7 2.4 4.5 5 4.8v3.1c-2.1 0-3.8-.6-5-1.6V16a6 6 0 1 1-6-6v3.5a2.5 2.5 0 1 0 2.5 2.5V3H16Z"/>',
+      youtube: '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z"/>',
+      discord: '<path d="M7.3 5.4a16 16 0 0 1 9.4 0l1.3 2.2c1.4.6 2.4 1.3 3 2.1-.2 3.2-1.3 6-3.2 8.2l-2.6-1.7-.7-1a13 13 0 0 0 2.1-1.1 14 14 0 0 1-9.2 0c.6.4 1.3.8 2.1 1.1l-.7 1-2.6 1.7C4.3 15.7 3.2 12.9 3 9.7c.6-.8 1.6-1.5 3-2.1l1.3-2.2Z"/><path d="M8.5 12.5h.01M15.5 12.5h.01" stroke-width="3"/>'
+    };
+    const svg = inner => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
+    const list = document.getElementById("links");
+    LINKS.forEach((item, index) => {
+      const enabled = /^https?:\/\//i.test(item.url);
+      const el = document.createElement(enabled ? "a" : "div");
+      el.className = `link enter${enabled ? "" : " disabled"}`;
+      el.style.setProperty("--delay", `${.22 + index * .075}s`);
+      if (enabled) {
+        el.href = item.url;
+        el.target = "_blank";
+        el.rel = "noopener noreferrer";
+      } else {
+        el.setAttribute("aria-disabled", "true");
+      }
+      const ico = document.createElement("div");
+      ico.className = "icon";
+      ico.innerHTML = svg(paths[item.icon] || paths.telegram);
+      const label = document.createElement("div");
+      label.className = "link-label";
+      const name = document.createElement("strong");
+      name.textContent = item.title;
+      label.appendChild(name);
+      const arrow = document.createElement("span");
+      arrow.className = "arrow";
+      arrow.textContent = "↗";
+      arrow.setAttribute("aria-hidden", "true");
+      el.append(ico, label, arrow);
+      if (enabled) {
+        el.addEventListener("pointermove", event => {
+          const r = el.getBoundingClientRect();
+          el.style.setProperty("--x", `${event.clientX - r.left}px`);
+          el.style.setProperty("--y", `${event.clientY - r.top}px`);
+        }, { passive: true });
+      }
+      list.appendChild(el);
+    });
+
+    // Subtle scroll reveal, disabled for reduced motion.
+    if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const sections = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        }
+      }, { threshold: .12, rootMargin: '0px 0px -20px 0px' });
+      sections.forEach(section => observer.observe(section));
+      document.body.classList.add('motion-enabled');
+    }
+
+    // Copy SHA-256 checksum; works in HTTPS and local file previews.
+    document.getElementById('rom-modal').addEventListener('click', async event => {
+      const button = event.target.closest('.copy-checksum');
+      if (!button) return;
+      const checksum = button.dataset.checksum;
+      let copied = false;
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(checksum);
+          copied = true;
+        }
+      } catch (_) { /* local files can block async clipboard */ }
+      if (!copied) {
+        const buffer = document.createElement('textarea');
+        buffer.value = checksum;
+        buffer.style.position = 'fixed';
+        buffer.style.opacity = '0';
+        document.body.appendChild(buffer);
+        buffer.select();
+        try { copied = document.execCommand('copy'); } catch (_) { copied = false; }
+        buffer.remove();
+      }
+      button.textContent = copied ? 'Copied!' : 'Select hash';
+      if (!copied) {
+        const code = button.parentElement.querySelector('code');
+        if (code) {
+          const range = document.createRange();
+          range.selectNodeContents(code);
+          getSelection().removeAllRanges();
+          getSelection().addRange(range);
+        }
+      }
+      window.setTimeout(() => { button.textContent = 'Copy'; }, 1600);
+    });
+
+    // Smooth, keyboard-accessible Vought release explorer.
+    const romModal = document.getElementById('rom-modal');
+    const romOpen = document.getElementById('open-roms');
+    const romClose = document.getElementById('close-roms');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let closeTimer;
+
+    function openRomModal() {
+      if (romModal.open) return;
+      clearTimeout(closeTimer);
+      romModal.showModal();
+      document.body.classList.add('modal-open');
+      requestAnimationFrame(() => requestAnimationFrame(() => romModal.classList.add('showing')));
+      romClose.focus({ preventScroll: true });
+    }
+
+    function closeRomModal() {
+      if (!romModal.open) return;
+      romModal.classList.remove('showing');
+      const finish = () => {
+        romModal.close();
+        document.body.classList.remove('modal-open');
+        romOpen.focus({ preventScroll: true });
+      };
+      if (reducedMotion.matches) finish();
+      else closeTimer = setTimeout(finish, 360);
+    }
+
+    romOpen.addEventListener('click', openRomModal);
+    romClose.addEventListener('click', closeRomModal);
+    romModal.addEventListener('cancel', event => {
+      event.preventDefault();
+      closeRomModal();
+    });
+    romModal.addEventListener('click', event => {
+      if (event.target === romModal) closeRomModal();
+    });
+
+</script>
+</body>
+</html>
